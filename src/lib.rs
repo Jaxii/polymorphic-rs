@@ -1,20 +1,21 @@
 use std::arch::asm;
-use rand::Rng;
+use rand::{Rng, thread_rng};
 
-#[inline]
+#[inline(always)]
 pub unsafe fn polymorph() {
-
+    let mut rng = thread_rng();
     let x: u32 = rng.gen_range(0..8);
     for a in 0..x {
 
+
         match x {
             0 => asm!(
-            "add eax, {x}",
-            "sub eax, {x}"
+            "add eax, 2",
+            "sub eax, 2"
             ),
             1 => asm!(
-            "add ecx, {x}",
-            "sub ecx, {x}"
+            "add ecx, 3",
+            "sub ecx, 3"
             ),
             2 => asm!(
             "inc ecx",
@@ -22,13 +23,13 @@ pub unsafe fn polymorph() {
             ),
             3 => asm!(
             "mov eax, eax",
-            "sub eax, {x}",
-            "add eax, {x}"
+            "sub eax, 8",
+            "add eax, 8"
             ),
             4 => asm!(
             "mov ecx, ecx",
-            "sub ecx, {x}",
-            "add ecx, {x}"
+            "sub ecx, 4",
+            "add ecx, 4"
             ),
             5 => asm!(
             "sub eax, 1",
@@ -39,18 +40,23 @@ pub unsafe fn polymorph() {
             "mov eax, eax"
             ),
             7 => asm!(
-            "pop ecx",
-            "push ecx"
+            "xor ecx, ecx",
+            "mov ecx, ecx"
             ),
             8 => asm!(
             "dec eax",
             "add eax, 1"
             ),
             _ => {
-                println!("wtf");
             }
         }
     }
 
 }
 
+
+#[test]
+pub fn main() {
+    unsafe { polymorph(); }
+
+}
